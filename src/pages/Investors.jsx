@@ -9,14 +9,14 @@ const models = [
   {
     icon: Building,
     title: 'Contract Manufacturing',
-    color: 'from-brand-500 to-brand-700',
+    color: 'from-emerald-600 to-emerald-700',
     desc: 'We produce your formulation using our certified facility. Perfect for FMCG brands looking for high-volume, cost-effective production.',
     benefits: ['Your recipe, our facility', 'Full FSSAI compliance', 'Scalable volumes', 'Quality guaranteed'],
   },
   {
     icon: Package,
     title: 'White-Label',
-    color: 'from-forest-800 to-forest-900',
+    color: 'from-emerald-800 to-emerald-900',
     desc: 'Launch your own beverage brand using our proven formulations. Minimal capex, maximum speed to market.',
     benefits: ['Ready formulations', 'Your branding on bottles', 'Fast time-to-market', 'MOQ flexible'],
   },
@@ -66,14 +66,14 @@ export default function Investors() {
   return (
     <PageWrapper>
       {/* Hero */}
-      <section className="relative pt-32 pb-20 bg-forest-900 overflow-hidden">
-        <div className="absolute inset-0 bg-linear-to-br from-forest-900 via-forest-800 to-[#1f1008]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-100 bg-brand-500/6 rounded-full blur-3xl" />
+      <section className="relative pt-32 pb-20 bg-emerald-900 overflow-hidden">
+        <div className="absolute inset-0 bg-linear-to-br from-emerald-900 via-emerald-800 to-[#1f1008]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-100 bg-emerald-600/6 rounded-full blur-3xl" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/15 border border-brand-500/30 mb-6">
-              <TrendingUp size={14} className="text-brand-400" />
-              <span className="text-brand-300 text-xs font-body font-semibold tracking-widest uppercase">Investor Relations</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-600/15 border border-emerald-600/30 mb-6">
+              <TrendingUp size={14} className="text-emerald-400" />
+              <span className="text-emerald-300 text-xs font-body font-semibold tracking-widest uppercase">Investor Relations</span>
             </div>
             <h1 className="font-display font-bold text-5xl md:text-6xl text-white mb-4">
               Invest in India's<br />
@@ -84,7 +84,7 @@ export default function Investors() {
             </p>
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 px-10 py-4 bg-brand-500 text-white font-body font-bold rounded-full hover:bg-brand-600 hover:shadow-2xl hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 px-10 py-4 bg-emerald-600 text-white font-body font-bold rounded-full hover:bg-emerald-700 hover:shadow-2xl hover:shadow-emerald-600/40 hover:-translate-y-0.5 transition-all duration-300"
             >
               Schedule a Meeting <ArrowRight size={18} />
             </Link>
@@ -106,7 +106,7 @@ export default function Investors() {
                 className="text-center"
               >
                 <div className="font-display font-bold text-4xl bg-linear-to-r from-(--brand-orange) via-(--brand-gold) to-(--brand-orange) bg-clip-text text-transparent mb-1">{s.value}</div>
-                <div className="font-display font-semibold text-forest-900 text-base mb-0.5">{s.label}</div>
+                <div className="font-display font-semibold text-emerald-900 text-base mb-0.5">{s.label}</div>
                 <div className="font-body text-gray-500 text-xs">{s.sub}</div>
               </motion.div>
             ))}
@@ -115,7 +115,7 @@ export default function Investors() {
       </section>
 
       {/* Business Models */}
-      <section className="py-24 px-6 md:px-12 lg:px-20 bg-cream">
+      <section className="py-24 px-6 md:px-12 lg:px-20 bg-emerald-50">
         <div className="max-w-7xl mx-auto">
           <SectionHeading
             eyebrow="Partnership Models"
@@ -138,12 +138,12 @@ export default function Investors() {
                   <div className={`w-14 h-14 rounded-2xl bg-linear-to-br ${m.color} flex items-center justify-center mb-5 shadow-lg`}>
                     <m.icon size={24} className="text-white" />
                   </div>
-                  <h3 className="font-display font-bold text-xl text-forest-900 mb-3">{m.title}</h3>
+                  <h3 className="font-display font-bold text-xl text-emerald-900 mb-3">{m.title}</h3>
                   <p className="font-body text-gray-500 text-sm leading-relaxed mb-5">{m.desc}</p>
                   <ul className="space-y-2">
                     {m.benefits.map((b) => (
                       <li key={b} className="flex items-center gap-2.5 font-body text-sm text-gray-600">
-                        <CheckCircle size={15} className="text-brand-500 shrink-0" />
+                        <CheckCircle size={15} className="text-emerald-600 shrink-0" />
                         {b}
                       </li>
                     ))}
@@ -158,7 +158,7 @@ export default function Investors() {
       {/* Why Richi */}
       <section className="py-24 px-6 md:px-12 lg:px-20 bg-white">
         <div className="max-w-7xl mx-auto">
-          <SectionHeading eyebrow="Competitive Edge" title="Why Choose Richi" />
+          <SectionHeading eyebrow="Competitive Edge" title="Why Choose Richi Food Products" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
               { icon: '🏭', title: 'Proven Capacity', desc: '100 KL/day production with room to scale — ready for high-volume commitments.' },
@@ -174,11 +174,11 @@ export default function Investors() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="flex gap-4 p-6 bg-cream rounded-2xl hover:shadow-md transition-all duration-300"
+                className="flex gap-4 p-6 bg-emerald-50 rounded-2xl hover:shadow-md transition-all duration-300"
               >
                 <div className="text-3xl shrink-0">{item.icon}</div>
                 <div>
-                  <h4 className="font-display font-bold text-lg text-forest-900 mb-1">{item.title}</h4>
+                  <h4 className="font-display font-bold text-lg text-emerald-900 mb-1">{item.title}</h4>
                   <p className="font-body text-gray-500 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
@@ -188,7 +188,7 @@ export default function Investors() {
       </section>
 
       {/* Case Studies */}
-      <section className="py-24 px-6 md:px-12 lg:px-20 bg-forest-900">
+      <section className="py-24 px-6 md:px-12 lg:px-20 bg-emerald-900">
         <div className="max-w-7xl mx-auto">
           <SectionHeading eyebrow="Case Studies" title="Proven Results" subtitle="Real partnerships, real outcomes." light />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -215,7 +215,7 @@ export default function Investors() {
                     { label: 'Result', value: cs.result },
                   ].map((row) => (
                     <div key={row.label}>
-                      <div className="font-body text-xs text-brand-400 uppercase tracking-wider mb-1">{row.label}</div>
+                      <div className="font-body text-xs text-emerald-400 uppercase tracking-wider mb-1">{row.label}</div>
                       <div className="font-body text-white/70 text-sm">{row.value}</div>
                     </div>
                   ))}
@@ -227,7 +227,7 @@ export default function Investors() {
       </section>
 
       {/* Expansion Plan */}
-      <section className="py-24 px-6 md:px-12 lg:px-20 bg-cream">
+      <section className="py-24 px-6 md:px-12 lg:px-20 bg-emerald-50">
         <div className="max-w-7xl mx-auto">
           <SectionHeading eyebrow="Roadmap" title="Expansion Plan" subtitle="Our strategic vision for the next 3 years." />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -241,13 +241,13 @@ export default function Investors() {
                 className="relative bg-white rounded-3xl p-7 shadow-sm hover:shadow-xl transition-all duration-500"
               >
                 {i < expansion.length - 1 && (
-                  <div className="hidden lg:block absolute top-1/2 -right-2.5 w-5 h-0.5 bg-brand-300 z-10" />
+                  <div className="hidden lg:block absolute top-1/2 -right-2.5 w-5 h-0.5 bg-emerald-300 z-10" />
                 )}
-                <div className="w-10 h-10 rounded-full bg-brand-500 text-white flex items-center justify-center font-body font-bold text-xs mb-4 shadow-md shadow-brand-500/30">
+                <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-body font-bold text-xs mb-4 shadow-md shadow-emerald-600/30">
                   {i + 1}
                 </div>
-                <div className="font-body text-brand-500 text-xs font-semibold uppercase tracking-wider mb-1">{e.phase}</div>
-                <div className="font-display font-bold text-lg text-forest-900 mb-2">{e.label}</div>
+                <div className="font-body text-emerald-600 text-xs font-semibold uppercase tracking-wider mb-1">{e.phase}</div>
+                <div className="font-display font-bold text-lg text-emerald-900 mb-2">{e.label}</div>
                 <div className="font-body text-gray-500 text-sm leading-relaxed">{e.desc}</div>
               </motion.div>
             ))}
@@ -256,7 +256,7 @@ export default function Investors() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-6 md:px-12 lg:px-20 bg-brand-500">
+      <section className="py-24 px-6 md:px-12 lg:px-20 bg-emerald-600">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <Handshake size={48} className="text-white mx-auto mb-6 opacity-80" />
@@ -267,7 +267,7 @@ export default function Investors() {
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 px-10 py-4 bg-white text-brand-600 font-body font-bold rounded-full hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-10 py-4 bg-white text-emerald-700 font-body font-bold rounded-full hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
               >
                 Contact Us <ArrowRight size={18} />
               </Link>

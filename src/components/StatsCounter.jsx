@@ -44,10 +44,10 @@ export default function StatsCounter({ light = false }) {
           transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="text-center"
         >
-          <div className={`font-display font-bold text-5xl md:text-6xl mb-1 ${light ? 'text-white' : 'bg-linear-to-r from-(--brand-orange) via-(--brand-gold) to-(--brand-orange) bg-clip-text text-transparent'}`}>
+          <div className={`font-display font-bold text-5xl md:text-6xl mb-1 ${light ? 'text-white' : 'bg-gradient-to-r from-emerald-500 via-emerald-500 to-emerald-500 bg-clip-text text-transparent'}`}>
             <CountUp end={stat.value} suffix={stat.suffix} />
           </div>
-          <div className={`font-display font-semibold text-lg mb-0.5 ${light ? 'text-white/90' : 'text-forest-900'}`}>
+          <div className={`font-display font-semibold text-lg mb-0.5 ${light ? 'text-white/90' : 'text-gray-900'}`}>
             {stat.label}
           </div>
           <div className={`font-body text-sm ${light ? 'text-white/50' : 'text-gray-500'}`}>
