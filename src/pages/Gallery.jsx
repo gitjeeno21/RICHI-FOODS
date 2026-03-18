@@ -1,5 +1,5 @@
 // pages/Gallery.jsx
-import React, { useState } from 'react'
+import React, { useState, useMemo, memo } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
@@ -20,7 +20,7 @@ const shouldDisableOrbs = () => {
   return false
 }
 
-const Orb = ({ className, delay = 0 }) => {
+const Orb = memo(({ className, delay = 0 }) => {
   if (shouldDisableOrbs()) return null
   return (
     <motion.div
@@ -29,7 +29,7 @@ const Orb = ({ className, delay = 0 }) => {
       transition={{ duration: 7 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
     />
   )
-}
+})
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState(null)
@@ -63,7 +63,7 @@ const Gallery = () => {
         <section className="relative py-20 px-4 overflow-hidden" style={{ background: 'linear-gradient(155deg, white 0%, #f9fafb 30%, white 70%, #f3f4f6 100%)' }}>
           <Orb className="w-80 h-80 bg-[#F97316]/20 top-10 -right-20" />
           <Orb className="w-64 h-64 bg-[#F97316]/15 top-20 -left-16" delay={2} />
-          <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M90 15 Q120 50 90 95 Q60 50 90 15Z' fill='%237A4A2A'/%3E%3C/svg%3E")`, backgroundSize: '200px 200px' }} />
+          <div className="absolute inset-0 pointer-events-none bg-pattern-leaf-light bg-pattern-opacity-3" />
           
           <div className="relative z-10 max-w-7xl mx-auto">
             {/* Breadcrumb */}

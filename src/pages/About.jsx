@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, memo } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
@@ -187,7 +187,7 @@ const shouldDisableOrbs = () => {
   return false
 }
 
-const Orb = ({ className, delay = 0 }) => {
+const Orb = memo(({ className, delay = 0 }) => {
   if (shouldDisableOrbs()) return null
   const reduced = prefersReducedMotion()
   return (
@@ -197,7 +197,7 @@ const Orb = ({ className, delay = 0 }) => {
       transition={reduced ? {} : { duration: 7 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
     />
   )
-}
+})
 
 // Dashed image placeholder — shown when src is empty/broken
 function ImgBox({ src, alt = '', className = '', objectFit = 'object-cover', label = 'Add Image', rounded = 'rounded-2xl', aspect }) {
@@ -311,8 +311,8 @@ export default function About() {
 
             {/* Left floating product card */}
             <motion.div
-              initial={{ opacity: 0, x: -40, rotate: -8 }}
-              animate={{ opacity: 1, x: 0, rotate: -8 }}
+              initial={{ opacity: 0, rotate: -8 }}
+              animate={{ opacity: 1, rotate: -8 }}
               transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="self-end mb-8"
             >
@@ -362,8 +362,8 @@ export default function About() {
 
             {/* Right floating product card */}
             <motion.div
-              initial={{ opacity: 0, x: 40, rotate: 8 }}
-              animate={{ opacity: 1, x: 0, rotate: 8 }}
+              initial={{ opacity: 0, rotate: 8 }}
+              animate={{ opacity: 1, rotate: 8 }}
               transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="self-end mb-8"
             >
@@ -489,10 +489,10 @@ export default function About() {
                 return (
                   <motion.div
                     key={item.year}
-                    initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     className={`relative grid md:grid-cols-2 gap-8 items-center ${isLeft ? '' : 'md:[&>*:first-child]:order-last'}`}
                   >
                     {/* Content side */}
@@ -642,8 +642,8 @@ export default function About() {
           </div>
           {/* Text */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="bg-[#2D1608] flex items-center px-12 py-20"
           >
@@ -672,8 +672,8 @@ export default function About() {
         <div className="grid md:grid-cols-2 min-h-[400px]">
           {/* Text */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="bg-gray-900 flex items-center px-12 py-20"
           >
@@ -719,8 +719,8 @@ export default function About() {
       <section className="py-28 px-6 md:px-12 lg:px-20 bg-white">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
             <span className="inline-block px-4 py-1.5 bg-[#FFF8EE] text-[#7A4A2A] rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-[#FFD9A8]">
@@ -736,8 +736,8 @@ export default function About() {
               {labPoints.map((point, i) => (
                 <motion.li
                   key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 }}
                   className="flex items-start gap-3"
@@ -757,8 +757,8 @@ export default function About() {
           {/* Lab image box */}
           {/* 🔁 Replace with your laboratory image */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
             <ImgBox
@@ -999,8 +999,8 @@ export default function About() {
           <div className="grid md:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
             {/* Founder letter */}
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               className="bg-white rounded-3xl p-10 shadow-xl border border-[#FFD9A8] relative"
             >
@@ -1031,8 +1031,8 @@ export default function About() {
             {/* Founder photo */}
             {/* 🔁 Replace with founder portrait image */}
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
               <ImgBox

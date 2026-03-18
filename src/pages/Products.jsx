@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import PageWrapper from '../components/PageWrapper'
@@ -15,7 +15,7 @@ const shouldDisableOrbs = () => {
   return false
 }
 
-const Orb = ({ className, delay = 0 }) => {
+const Orb = memo(({ className, delay = 0 }) => {
   if (shouldDisableOrbs()) return null
   return (
     <motion.div
@@ -24,7 +24,7 @@ const Orb = ({ className, delay = 0 }) => {
       transition={{ duration: 7 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
     />
   )
-}
+})
 
 const products = [
   { name: 'Apple', category: 'Juice', img: '/images/products/apple.png', color: '#10b981' },
@@ -57,13 +57,7 @@ export default function Products() {
     <PageWrapper>
       {/* Hero */}
       <section className="relative pt-32 pb-20 bg-white overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{
-            opacity: 0.055,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M90 15 Q120 50 90 95 Q60 50 90 15Z' fill='%239A3412'/%3E%3Cpath d='M25 80 Q65 95 55 140 Q25 110 25 80Z' fill='%239A3412'/%3E%3Cpath d='M155 80 Q115 95 125 140 Q155 110 155 80Z' fill='%239A3412'/%3E%3Cpath d='M90 100 Q130 120 120 165 Q85 140 90 100Z' fill='%239A3412' opacity='0.6'/%3E%3C/svg%3E")`,
-            backgroundSize: '200px 200px',
-          }}
-        />
+        <div className="absolute inset-0 pointer-events-none bg-pattern-leaf bg-pattern-opacity-55" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-gray-100 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
           {/* Breadcrumb */}

@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import PageWrapper from '../components/PageWrapper'
-import { FiShoppingCart, FiHeart, FiShare2, FiStar, FiCheck } from 'react-icons/fi'
+import { ShoppingCart, Heart, Share2, Star, Check } from 'lucide-react'
 
 /* ══════════════════════════════════════════════════════════
    HELPER COMPONENTS
@@ -126,7 +126,7 @@ const ProductDetail = () => {
                   <div className="flex items-center gap-2 mb-4">
                     <div className="flex text-[#F97316]">
                       {[...Array(5)].map((_, i) => (
-                        <FiStar key={i} className={i < Math.floor(product.rating) ? 'fill-current' : ''} />
+                        <Star key={i} size={20} className={i < Math.floor(product.rating) ? 'fill-current' : ''} />
                       ))}
                     </div>
                     <span className="text-[#7A4A2A]/70">{product.rating} ({product.reviews} reviews)</span>
@@ -134,10 +134,10 @@ const ProductDetail = () => {
                 </div>
                 <div className="flex gap-2">
                   <button className="p-2 hover:bg-[#FFF8EE] rounded-full transition-colors text-[#7A4A2A]/70 hover:text-[#F97316]">
-                    <FiHeart className="w-5 h-5" />
+                    <Heart className="w-5 h-5" />
                   </button>
                   <button className="p-2 hover:bg-[#FFF8EE] rounded-full transition-colors text-[#7A4A2A]/70 hover:text-[#F97316]">
-                    <FiShare2 className="w-5 h-5" />
+                    <Share2 className="w-5 h-5" />
                   </button>
                 </div>
               </div>
@@ -150,7 +150,7 @@ const ProductDetail = () => {
                 <ul className="space-y-2">
                   {product.features.map((feature, index) => (
                     <li key={index} className="flex items-center gap-2 text-[#7A4A2A]/70">
-                      <FiCheck className="w-5 h-5 text-[#F97316] flex-shrink-0" />
+                      <Check className="w-5 h-5 text-[#F97316] flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -196,7 +196,7 @@ const ProductDetail = () => {
                   </button>
                 </div>
                 <button className="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-[#F97316] text-white font-bold rounded-full transition-all duration-300 hover:bg-[#A8430F] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0">
-                  <FiShoppingCart className="w-5 h-5" />
+                  <ShoppingCart className="w-5 h-5" />
                   Add to Cart - ${(product.price * quantity).toFixed(2)}
                 </button>
               </div>

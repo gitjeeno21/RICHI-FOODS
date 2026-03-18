@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Phone, MapPin, ExternalLink } from 'lucide-react'
 
-export default function Footer() {
+const Footer = memo(function Footer() {
   return (
     <footer className="bg-gray-900 text-white relative overflow-hidden">
       {/* Decorative */}
@@ -103,4 +104,6 @@ export default function Footer() {
       </div>
     </footer>
   )
-}
+})
+
+export default Footer

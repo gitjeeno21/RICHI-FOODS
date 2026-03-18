@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo, useCallback } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown } from 'lucide-react'
@@ -23,28 +23,40 @@ const C = {
   text:         '#7A4A2A',   // warm rust
 }
 
-export default function Navbar() {
+function Navbar() {
   const [scrolled,    setScrolled]    = useState(false)
   const [mobileOpen,  setMobileOpen]  = useState(false)
   const [atTop,       setAtTop]       = useState(true)
   const location = useLocation()
-  const [ticking, setTicking] = useState(false)
 
   useEffect(() => {
-    // Debounced scroll handler to improve performance
+    // Use ref-based RAF throttle to avoid state ping-pong
+    let rafId = null
+    let lastScrollY = window.scrollY
+    
     const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 50)
-          setAtTop(window.scrollY < 10)
-          setTicking(false)
-        })
-        setTicking(true)
-      }
+      if (rafId) return
+      
+      rafId = window.requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY
+        // Only update state if threshold crossed
+        if ((lastScrollY <= 50 && currentScrollY > 50) || (lastScrollY > 50 && currentScrollY <= 50)) {
+          setScrolled(currentScrollY > 50)
+        }
+        if ((lastScrollY >= 10 && currentScrollY < 10) || (lastScrollY < 10 && currentScrollY >= 10)) {
+          setAtTop(currentScrollY < 10)
+        }
+        lastScrollY = currentScrollY
+        rafId = null
+      })
     }
+    
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [ticking])
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [])
 
   // Close mobile menu on route change
   useEffect(() => setMobileOpen(false), [location])
@@ -55,7 +67,7 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
 
-  const isActive = (path) => location.pathname === path
+  const isActive = useCallback((path) => location.pathname === path, [location.pathname])
 
   return (
     <>
@@ -283,3 +295,5 @@ export default function Navbar() {
     </>
   )
 }
+
+export default memo(Navbar)

@@ -1,25 +1,51 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo, memo } from 'react'
 import { motion, useInView } from 'framer-motion'
+
+// Check for reduced motion preference once at module load
+const prefersReducedMotion = () => {
+  if (typeof window !== 'undefined') {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }
+  return false
+}
+
+const REDUCED_MOTION = prefersReducedMotion()
 
 function CountUp({ end, duration = 2, suffix = '' }) {
   const [count, setCount] = useState(0)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+  const timerRef = useRef(null)
 
   useEffect(() => {
     if (!isInView) return
+    
+    // If reduced motion, set to end immediately
+    if (REDUCED_MOTION) {
+      setCount(end)
+      return
+    }
+
     let start = 0
     const step = end / (duration * 60)
-    const timer = setInterval(() => {
+    
+    timerRef.current = setInterval(() => {
       start += step
       if (start >= end) {
         setCount(end)
-        clearInterval(timer)
+        clearInterval(timerRef.current)
+        timerRef.current = null
       } else {
         setCount(Math.floor(start))
       }
     }, 1000 / 60)
-    return () => clearInterval(timer)
+    
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        timerRef.current = null
+      }
+    }
   }, [isInView, end, duration])
 
   return <span ref={ref}>{count}{suffix}</span>
@@ -32,10 +58,12 @@ const stats = [
   { value: 6, suffix: ' Mo', label: 'Shelf Life', desc: 'Quality guaranteed' },
 ]
 
-export default function StatsCounter({ light = false }) {
+const StatsCounter = memo(function StatsCounter({ light = false }) {
+  const memoizedStats = useMemo(() => stats, [])
+  
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-      {stats.map((stat, i) => (
+      {memoizedStats.map((stat, i) => (
         <motion.div
           key={stat.label}
           initial={{ opacity: 0, y: 30 }}
@@ -57,4 +85,6 @@ export default function StatsCounter({ light = false }) {
       ))}
     </div>
   )
-}
+})
+
+export default StatsCounter

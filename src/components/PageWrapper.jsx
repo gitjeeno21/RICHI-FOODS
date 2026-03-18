@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 
 const pageVariants = {
@@ -6,7 +7,7 @@ const pageVariants = {
   exit: { opacity: 0, y: -20 },
 }
 
-export default function PageWrapper({ children }) {
+const PageWrapper = memo(function PageWrapper({ children }) {
   return (
     <motion.div
       variants={pageVariants}
@@ -18,4 +19,6 @@ export default function PageWrapper({ children }) {
       {children}
     </motion.div>
   )
-}
+})
+
+export default PageWrapper

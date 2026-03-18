@@ -1,7 +1,7 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 
-export default function ProductCard({ name, category, img, color, index }) {
-
+const ProductCard = memo(function ProductCard({ name, category, img, color, index }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -19,6 +19,7 @@ export default function ProductCard({ name, category, img, color, index }) {
             src={img} 
             alt={name}
             className="h-full w-auto object-contain drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-300"
+            loading="lazy"
           />
         ) : (
           <div className="text-6xl">🍹</div>
@@ -34,4 +35,14 @@ export default function ProductCard({ name, category, img, color, index }) {
       </h3>
     </motion.div>
   )
-}
+}, (prevProps, nextProps) => {
+  // Custom comparison: only re-render if these props change
+  return (
+    prevProps.name === nextProps.name &&
+    prevProps.category === nextProps.category &&
+    prevProps.img === nextProps.img &&
+    prevProps.index === nextProps.index
+  )
+})
+
+export default ProductCard

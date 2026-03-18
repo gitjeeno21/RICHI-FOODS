@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo, memo, useCallback } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ChevronRight, ArrowRight, MapPin, Phone, Mail, Star, Droplets, Leaf, Zap, Award } from 'lucide-react'
@@ -535,12 +535,7 @@ export default function Home() {
       >
         {/* Leaf / botanical SVG texture — matches dffipl.com subtle bg motif */}
         <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            opacity: 0.055,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M90 15 Q120 50 90 95 Q60 50 90 15Z' fill='%239A3412'/%3E%3Cpath d='M25 80 Q65 95 55 140 Q25 110 25 80Z' fill='%239A3412'/%3E%3Cpath d='M155 80 Q115 95 125 140 Q155 110 155 80Z' fill='%239A3412'/%3E%3Cpath d='M90 100 Q130 120 120 165 Q85 140 90 100Z' fill='%239A3412' opacity='0.6'/%3E%3C/svg%3E")`,
-            backgroundSize: '200px 200px',
-          }}
+          className="absolute inset-0 pointer-events-none bg-pattern-leaf bg-pattern-opacity-55"
         />
 
         {/* Ambient glow orbs */}
