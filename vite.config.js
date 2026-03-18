@@ -4,25 +4,35 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        'cilo-orange': {
-          light: '#FFF3E0',
-          DEFAULT: '#FF9800',
-          dark: '#F57C00',
-        }
+  build: {
+    // Aggressive chunk splitting for better caching and parallel loading
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'animation-vendor': ['framer-motion'],
+          'icons-vendor': ['lucide-react', 'react-icons'],
+        },
       },
-      fontFamily: {
-        'sans': ['Inter', 'sans-serif'],
-        'display': ['Poppins', 'sans-serif'],
-      }
     },
+    // Reduce bundle size
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+      },
+    },
+    // Optimize chunks
+    chunkSizeWarningLimit: 1000,
+    cssCodeSplit: true,
+    sourcemap: false,
+    reportCompressedSize: false,
+    target: 'esnext',
   },
 
+  // Optimize asset handling
+  assetsInclude: ['**/*.woff', '**/*.woff2'],
 })
+

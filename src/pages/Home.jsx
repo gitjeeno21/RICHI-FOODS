@@ -1,8 +1,27 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ChevronRight, ArrowRight, MapPin, Phone, Mail, Star, Droplets, Leaf, Zap, Award } from 'lucide-react'
 import PageWrapper from '../components/PageWrapper'
+
+// Check for reduced motion preference
+const prefersReducedMotion = () => {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+// Disable Orbs on low-end devices to save memory
+const shouldDisableOrbs = () => {
+  // Check device RAM if available (via navigator)
+  if (typeof navigator !== 'undefined' && navigator.deviceMemory) {
+    return navigator.deviceMemory <= 4
+  }
+  // On very small screens, also disable
+  if (typeof window !== 'undefined') {
+    return window.innerWidth < 480
+  }
+  return false
+}
 
 /* ══════════════════════════════════════════════════════════════
    DATA
@@ -168,13 +187,23 @@ const ticker = ['Paalman Milk', 'Apple', 'Grapes', 'White Lemon', 'Meriba Water'
    UTILITY COMPONENTS
 ══════════════════════════════════════════════════════════════ */
 
-const Orb = ({ className, delay = 0 }) => (
-  <motion.div
-    className={`absolute rounded-full blur-3xl pointer-events-none ${className}`}
-    animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
-    transition={{ duration: 6 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
-  />
-)
+const Orb = ({ className, delay = 0 }) => {
+  const shouldReduceMotion = prefersReducedMotion()
+  const disableOrbs = shouldDisableOrbs()
+  
+  // Don't render orbs on low-end devices
+  if (disableOrbs) {
+    return null
+  }
+  
+  return (
+    <motion.div
+      className={`absolute rounded-full blur-3xl pointer-events-none ${className}`}
+      animate={shouldReduceMotion ? {} : { scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
+      transition={shouldReduceMotion ? {} : { duration: 6 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
+    />
+  )
+}
 
 // Dashed image placeholder shown when src is empty / broken
 function ImgPlaceholder({ label, dark = false }) {
@@ -192,12 +221,14 @@ function ImgPlaceholder({ label, dark = false }) {
 }
 
 function Ticker() {
+  const shouldReduceMotion = prefersReducedMotion()
+  
   return (
     <div className="overflow-hidden whitespace-nowrap border-y border-[#F5D9C8] py-3 bg-white/90 backdrop-blur-sm">
       <motion.div
         className="flex gap-14 w-max"
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+        animate={shouldReduceMotion ? {} : { x: ['0%', '-50%'] }}
+        transition={shouldReduceMotion ? {} : { duration: 24, repeat: Infinity, ease: 'linear' }}
       >
         {[...ticker, ...ticker].map((t, i) => (
           <span key={i} className="text-sm font-semibold text-[#9A3412] tracking-widest uppercase flex items-center gap-3">
@@ -216,20 +247,47 @@ function Ticker() {
    Each card is absolutely positioned relative to the fan container,
    offset from centre using xOffset, rotated by rot, scaled by scale.
 ══════════════════════════════════════════════════════════════ */
-function HeroFanCard({ card }) {
+function HeroFanCard({ card, isMobile, isTablet }) {
   const [hov, setHov] = useState(false)
   const isCentre = card.rot === 0
+  const shouldReduceMotion = prefersReducedMotion()
 
-  return (
-    <motion.div
-      onHoverStart={() => setHov(true)}
-      onHoverEnd={() => setHov(false)}
-      initial={{ opacity: 0, y: 80 }}
-      animate={{ 
-        opacity: 1, 
+  // Responsive positioning
+  let xOffset = card.xOffset
+  let yOffset = card.yOffset
+  let rot = card.rot
+  let scale = card.scale
+  let marginLeft = '-88px'
+  
+  if (isMobile) {
+    // Hide side cards on mobile, show only center 3-4 cards
+    if (Math.abs(card.xOffset) > 280) {
+      return null
+    }
+    // Scale down offsets for mobile
+    xOffset = card.xOffset * 0.4
+    yOffset = card.yOffset * 0.5
+    rot = card.rot * 0.6
+    scale = card.scale * 0.8
+    marginLeft = '-56px'
+  } else if (isTablet) {
+    // Scale for tablet
+    xOffset = card.xOffset * 0.65
+    yOffset = card.yOffset * 0.7
+    rot = card.rot * 0.8
+    scale = card.scale * 0.9
+    marginLeft = '-70px'
+  }
+
+  const yAnimation = shouldReduceMotion
+    ? {}
+    : {
         y: [0, -12, 0],
-      }}
-      transition={{
+      }
+
+  const yTransition = shouldReduceMotion
+    ? {}
+    : {
         y: {
           duration: 3 + Math.random() * 0.5,
           repeat: Infinity,
@@ -241,32 +299,41 @@ function HeroFanCard({ card }) {
           delay: 0.4 + Math.abs(card.xOffset) / 2200,
           ease: [0.22, 1, 0.36, 1],
         }
+      }
+
+  return (
+    <motion.div
+      onHoverStart={() => setHov(true)}
+      onHoverEnd={() => setHov(false)}
+      initial={{ opacity: 0, y: 80 }}
+      animate={{ 
+        opacity: 1, 
+        ...yAnimation,
       }}
-      whileHover={{
+      transition={yTransition}
+      whileHover={!isMobile ? {
         y: -20,
-        scale: card.scale * 1.05,
+        scale: scale * 1.05,
         zIndex: 30,
         transition: { type: 'spring', stiffness: 280, damping: 18 },
-      }}
+      } : {}}
       style={{
         position: 'absolute',
-        // Fan spread: translate from centre by xOffset
-        left: `calc(50% + ${card.xOffset}px)`,
+        left: `calc(50% + ${xOffset}px)`,
         bottom: 0,
-        marginLeft: '-88px',   // half of card width (176px)
+        marginLeft: marginLeft,
         zIndex: card.z,
-        scale: card.scale,
-        rotate: card.rot,
+        scale: scale,
+        rotate: rot,
         transformOrigin: 'bottom center',
+        willChange: 'transform, opacity',
       }}
-      className="cursor-pointer"
+      className={`${!isMobile ? 'cursor-pointer' : ''}`}
     >
-      {/* ── CARD ── */}
       <div
         className="relative w-44 h-72 rounded-3xl overflow-hidden shadow-2xl"
         style={{ backgroundColor: card.bg }}
       >
-        {/* Organic swirl background — matches real site abstract card art */}
         <div
           className="absolute inset-0"
           style={{
@@ -277,7 +344,6 @@ function HeroFanCard({ card }) {
             `,
           }}
         />
-        {/* Diagonal stripe accent */}
         <div
           className="absolute inset-0 opacity-15"
           style={{
@@ -291,35 +357,26 @@ function HeroFanCard({ card }) {
           }}
         />
 
-        {/* ══ PRODUCT BOTTLE IMAGE ══
-            Replace card.img path with your actual product image.
-            Transparent PNG recommended. Bottle should face forward.
-            Ideal size: 300×500px or similar portrait ratio. */}
         <img
           src={card.img}
           alt={card.name}
-          className="absolute inset-0 w-full h-full object-contain z-10 px-5 pt-5 pb-10
-            drop-shadow-[0_12px_28px_rgba(0,0,0,0.22)]"
+          className="absolute inset-0 w-full h-full object-contain z-10 px-5 pt-5 pb-10 drop-shadow-[0_12px_28px_rgba(0,0,0,0.22)]"
           onError={(e) => { e.target.style.display = 'none' }}
+          loading="lazy"
         />
 
-        {/* Fallback placeholder when image not set */}
         <ImgPlaceholder label={card.name} dark />
 
-        {/* Top-right gloss */}
         <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-white/20 blur-2xl pointer-events-none" />
 
-        {/* Shine overlay */}
         <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/15 to-transparent pointer-events-none z-20" />
 
-        {/* Hover shine sweep */}
         <motion.div
           className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/25 to-white/0 z-20"
-          animate={{ x: hov ? '120%' : '-120%' }}
-          transition={{ duration: 0.55, ease: 'easeInOut' }}
+          animate={!isMobile ? { x: hov ? '120%' : '-120%' } : {}}
+          transition={!isMobile ? { duration: 0.55, ease: 'easeInOut' } : {}}
         />
 
-        {/* Bottom name label — visible on centre card or on hover */}
         <motion.div
           animate={{ opacity: hov || isCentre ? 1 : 0 }}
           transition={{ duration: 0.2 }}
@@ -331,7 +388,6 @@ function HeroFanCard({ card }) {
         </motion.div>
       </div>
 
-      {/* Colour glow beneath centre card */}
       {isCentre && (
         <div
           className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-28 h-6 rounded-full blur-xl opacity-50 pointer-events-none"
@@ -347,6 +403,14 @@ function HeroFanCard({ card }) {
 ══════════════════════════════════════════════════════════════ */
 function ProductCard({ product, idx }) {
   const [hovered, setHovered] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const shouldReduceMotion = prefersReducedMotion()
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <motion.div
@@ -354,12 +418,12 @@ function ProductCard({ product, idx }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: idx * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
+      onHoverStart={() => !isMobile && setHovered(true)}
+      onHoverEnd={() => !isMobile && setHovered(false)}
       className="relative group cursor-pointer"
     >
       <motion.div
-        animate={{ y: hovered ? -10 : 0 }}
+        animate={{ y: !isMobile && hovered ? -10 : 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         className={`relative rounded-[2rem] overflow-hidden h-72 shadow-xl ${product.glow} shadow-2xl`}
       >
@@ -369,8 +433,8 @@ function ProductCard({ product, idx }) {
         {/* Shine sweep */}
         <motion.div
           className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 z-10"
-          animate={{ x: hovered ? '100%' : '-100%' }}
-          transition={{ duration: 0.55, ease: 'easeInOut' }}
+          animate={!isMobile ? { x: hovered ? '100%' : '-100%' } : {}}
+          transition={!isMobile ? { duration: 0.55, ease: 'easeInOut' } : {}}
         />
 
         {/* Tag */}
@@ -384,7 +448,7 @@ function ProductCard({ product, idx }) {
             Replace product.img path with your product image.
             Transparent PNG (portrait) recommended. */}
         <motion.div
-          animate={{ y: hovered ? -8 : 0, scale: hovered ? 1.07 : 1 }}
+          animate={{ y: !isMobile && hovered ? -8 : 0, scale: !isMobile && hovered ? 1.07 : 1 }}
           transition={{ type: 'spring', stiffness: 260, damping: 18 }}
           className="absolute inset-x-0 top-6 bottom-14 z-10 flex items-center justify-center px-6"
         >
@@ -394,6 +458,7 @@ function ProductCard({ product, idx }) {
               alt={product.name}
               className="w-full h-full object-contain drop-shadow-xl"
               onError={(e) => { e.target.style.display = 'none' }}
+              loading="lazy"
             />
             <ImgPlaceholder label={product.name} dark />
           </div>
@@ -429,6 +494,22 @@ export default function Home() {
   const textY      = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
   const textOpacity= useTransform(scrollYProgress, [0, 0.55], [1, 0])
   const cardsY     = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
+
+  const [isMobile, setIsMobile] = useState(false)
+  const [isTablet, setIsTablet] = useState(false)
+  const shouldReduceMotion = prefersReducedMotion()
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth
+      setIsMobile(width < 768)
+      setIsTablet(width >= 768 && width < 1024)
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <PageWrapper>
@@ -558,10 +639,10 @@ export default function Home() {
           {/* Fan container — overflow hidden hides partial side cards */}
           <div
             className="relative w-full overflow-hidden"
-            style={{ height: '360px' }}
+            style={{ height: isMobile ? '280px' : '360px' }}
           >
             {heroCards.map((card, i) => (
-              <HeroFanCard key={i} card={card} />
+              <HeroFanCard key={i} card={card} isMobile={isMobile} isTablet={isTablet} />
             ))}
           </div>
         </motion.div>
@@ -575,8 +656,8 @@ export default function Home() {
         >
           <span className="text-[10px] text-[#F97316]/45 font-bold tracking-widest uppercase">Scroll</span>
           <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.4, repeat: Infinity }}
+            animate={shouldReduceMotion ? {} : { y: [0, 6, 0] }}
+            transition={shouldReduceMotion ? {} : { duration: 1.4, repeat: Infinity }}
             className="w-4 h-6 rounded-full border-2 border-[#F97316]/35 flex items-start justify-center pt-1"
           >
             <div className="w-0.5 h-1.5 bg-[#F97316]/40 rounded-full" />

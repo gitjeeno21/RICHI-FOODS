@@ -1,3 +1,184 @@
 @import "tailwindcss";
 
 /* ================= THEME VARIABLES ================= */
+
+/* ================= MOBILE PERFORMANCE OPTIMIZATIONS ================= */
+
+/* Reduce expensive effects on mobile */
+@media (max-width: 768px) {
+  /* Disable or reduce backdrop-blur on mobile for better performance */
+  .backdrop-blur,
+  .backdrop-blur-md,
+  .backdrop-blur-xl {
+    backdrop-filter: none;
+  }
+
+  /* Reduce blur effects on mobile */
+  .blur-3xl {
+    filter: none;
+  }
+
+  .blur-2xl {
+    filter: blur(12px);
+  }
+
+  .blur-xl {
+    filter: blur(8px);
+  }
+
+  /* Optimize shadow rendering */
+  .shadow-2xl,
+  .shadow-xl {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Prevent layout shift on mobile */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Disable animations for users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ================= PRODUCTION LOW-RAM OPTIMIZATIONS ================= */
+
+@media (prefers-color-scheme: light) {
+  /* Further reduce animations on low-end devices */
+  @supports (content-visibility: auto) {
+    /* Use content-visibility to improve rendering performance */
+    section {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 500px;
+    }
+  }
+}
+
+/* ================= WILL-CHANGE OPTIMIZATION ================= */
+
+/* Apply will-change to animated elements to improve performance */
+.motion-div {
+  will-change: transform, opacity;
+}
+
+/* Be selective with will-change to avoid memory overhead */
+[class*="animate-"] {
+  will-change: auto;
+}
+
+/* Only use will-change on hover to save memory */
+.group:hover .motion-div {
+  will-change: transform, opacity;
+}
+
+/* ================= IMAGE OPTIMIZATION ================= */
+
+img {
+  /* Prevent layout shift */
+  display: block;
+  height: auto;
+  /* Improve rendering */
+  contain: content;
+}
+
+/* Lazy loading images should start invisible */
+img[loading="lazy"] {
+  background-color: #f3f4f6;
+}
+
+/* Disable image effects on low RAM */
+@media (max-width: 640px) {
+  img {
+    image-rendering: auto;
+  }
+}
+
+/* ================= GPU OPTIMIZATION ================= */
+
+/* Use GPU acceleration selectively */
+.transform,
+.transition,
+[class*="animate-"] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Reduce this on mobile to save memory */
+@media (max-width: 768px) {
+  .transform,
+  .transition,
+  [class*="animate-"] {
+    transform: none;
+    backface-visibility: visible;
+  }
+}
+
+/* ================= FONT OPTIMIZATION ================= */
+
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter'), local('Inter-Regular');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: local('Playfair Display'), local('PlayfairDisplay');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ================= SCROLL OPTIMIZATION ================= */
+
+html {
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ================= REDUCE MOTION FOR LOW-END DEVICES ================= */
+
+@media (max-width: 480px) {
+  /* Disable most animations on very small devices */
+  *:not(.no-reduce-animation) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+
+  /* Keep only essential transitions */
+  .transition,
+  .transition-all {
+    transition-duration: 0.1s !important;
+  }
+}
+
+/* ================= CRITICAL CSS ================= */
+
+/* Load critical CSS first */
+html {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: white;
+}
+
+

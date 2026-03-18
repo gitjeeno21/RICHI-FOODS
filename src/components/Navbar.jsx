@@ -28,15 +28,23 @@ export default function Navbar() {
   const [mobileOpen,  setMobileOpen]  = useState(false)
   const [atTop,       setAtTop]       = useState(true)
   const location = useLocation()
+  const [ticking, setTicking] = useState(false)
 
   useEffect(() => {
+    // Debounced scroll handler to improve performance
     const onScroll = () => {
-      setScrolled(window.scrollY > 50)
-      setAtTop(window.scrollY < 10)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50)
+          setAtTop(window.scrollY < 10)
+          setTicking(false)
+        })
+        setTicking(true)
+      }
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [ticking])
 
   // Close mobile menu on route change
   useEffect(() => setMobileOpen(false), [location])
