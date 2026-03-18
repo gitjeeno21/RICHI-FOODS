@@ -258,18 +258,22 @@ function HeroFanCard({ card, isMobile, isTablet }) {
   let rot = card.rot
   let scale = card.scale
   let marginLeft = '-88px'
-  
+
+  const isVerySmall = typeof window !== 'undefined' && window.innerWidth < 380
+
   if (isMobile) {
-    // Hide side cards on mobile, show only center 3-4 cards
-    if (Math.abs(card.xOffset) > 280) {
+    // On very small screens (< 380px) show only the center 3 cards
+    const cutoff = isVerySmall ? 140 : 280
+    if (Math.abs(card.xOffset) > cutoff) {
       return null
     }
     // Scale down offsets for mobile
-    xOffset = card.xOffset * 0.4
+    const factor = isVerySmall ? 0.28 : 0.4
+    xOffset = card.xOffset * factor
     yOffset = card.yOffset * 0.5
     rot = card.rot * 0.6
-    scale = card.scale * 0.8
-    marginLeft = '-56px'
+    scale = card.scale * (isVerySmall ? 0.7 : 0.8)
+    marginLeft = isVerySmall ? '-44px' : '-56px'
   } else if (isTablet) {
     // Scale for tablet
     xOffset = card.xOffset * 0.65
@@ -526,6 +530,7 @@ export default function Home() {
         style={{
           minHeight: '100vh',
           background: '#ffffff',
+          maxWidth: '100vw',
         }}
       >
         {/* Leaf / botanical SVG texture — matches dffipl.com subtle bg motif */}

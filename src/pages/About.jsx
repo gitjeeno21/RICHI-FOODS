@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
@@ -170,13 +170,34 @@ const pillars = [
    HELPERS
 ══════════════════════════════════════════════════════════ */
 
-const Orb = ({ className, delay = 0 }) => (
-  <motion.div
-    className={`absolute rounded-full blur-3xl pointer-events-none ${className}`}
-    animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
-    transition={{ duration: 7 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
-  />
-)
+// Check for reduced motion preference
+const prefersReducedMotion = () => {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+// Disable Orbs on low-end / small-screen devices
+const shouldDisableOrbs = () => {
+  if (typeof navigator !== 'undefined' && navigator.deviceMemory) {
+    return navigator.deviceMemory <= 4
+  }
+  if (typeof window !== 'undefined') {
+    return window.innerWidth < 480
+  }
+  return false
+}
+
+const Orb = ({ className, delay = 0 }) => {
+  if (shouldDisableOrbs()) return null
+  const reduced = prefersReducedMotion()
+  return (
+    <motion.div
+      className={`absolute rounded-full blur-3xl pointer-events-none ${className}`}
+      animate={reduced ? {} : { scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
+      transition={reduced ? {} : { duration: 7 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
+    />
+  )
+}
 
 // Dashed image placeholder — shown when src is empty/broken
 function ImgBox({ src, alt = '', className = '', objectFit = 'object-cover', label = 'Add Image', rounded = 'rounded-2xl', aspect }) {
@@ -225,17 +246,27 @@ function TeamPhoto({ src, alt, size = 'w-20 h-20' }) {
 ══════════════════════════════════════════════════════════ */
 export default function About() {
 
-  // Commitment carousel
+  // Responsive carousel sizing
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  )
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Commitment carousel — 1 card on mobile, 2 on sm, 3 on md+
+  const commitVisible = windowWidth < 640 ? 1 : windowWidth < 1024 ? 2 : 3
   const [commitIdx, setCommitIdx] = useState(0)
-  const commitVisible = 3
-  const commitMax = commitments.length - commitVisible
+  const commitMax = Math.max(0, commitments.length - commitVisible)
   const prevCommit = () => setCommitIdx(i => Math.max(0, i - 1))
   const nextCommit = () => setCommitIdx(i => Math.min(commitMax, i + 1))
 
-  // Pillars carousel
+  // Pillars carousel — 2 on mobile, 3 on sm, 5 on md+
+  const pillarVisible = windowWidth < 640 ? 2 : windowWidth < 1024 ? 3 : 5
   const [pillarIdx, setPillarIdx] = useState(0)
-  const pillarVisible = 5
-  const pillarMax = pillars.length - pillarVisible
+  const pillarMax = Math.max(0, pillars.length - pillarVisible)
   const prevPillar = () => setPillarIdx(i => Math.max(0, i - 1))
   const nextPillar = () => setPillarIdx(i => Math.min(pillarMax, i + 1))
 
@@ -274,8 +305,9 @@ export default function About() {
             <span className="text-[#7A4A2A]">About</span>
           </motion.div>
 
-          {/* Hero layout — product images float left & right, text in centre */}
-          <div className="grid grid-cols-[180px_1fr_180px] md:grid-cols-[220px_1fr_220px] gap-4 items-end">
+        {/* Hero layout — product images float left & right on desktop, hidden on mobile */}
+          {/* Mobile: just centre text. Desktop: 3-col grid with tilted product cards. */}
+          <div className="hidden md:grid grid-cols-[220px_1fr_220px] gap-4 items-end">
 
             {/* Left floating product card */}
             <motion.div
@@ -299,7 +331,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            {/* Centre text */}
+            {/* Centre text — desktop version inside the 3-col grid */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -350,6 +382,33 @@ export default function About() {
               </div>
             </motion.div>
           </div>
+
+          {/* Mobile: stacked centre text only (no tilted cards — saves layout space) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="md:hidden text-center pb-12 px-2"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur border border-[#FFD9A8] text-[#7A4A2A] text-xs font-bold mb-6 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-[#FB923C] animate-pulse" />
+              Since 2008
+            </span>
+            <h1
+              className="font-black leading-tight text-[#1A0C04] mb-5"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2rem, 7vw, 3rem)' }}
+            >
+              Richi Food Products
+              <br />
+              <span className="text-[#F97316]">Private Limited</span>
+            </h1>
+            <p className="text-[#4A2800]/60 leading-relaxed text-base mb-3">
+              Founded in 2008, a leading provider of high-quality beverages across South India.
+            </p>
+            <p className="text-[#4A2800]/50 leading-relaxed text-sm">
+              Driven by excellence, innovation, and sustainability.
+            </p>
+          </motion.div>
         </div>
 
         {/* Wave divider */}

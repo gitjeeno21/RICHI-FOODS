@@ -583,22 +583,11 @@ img[loading="lazy"] {
 
 /* ================= GPU OPTIMIZATION ================= */
 
-/* Use GPU acceleration selectively */
-.transform,
-.transition,
-[class*="animate-"] {
-  transform: translateZ(0);
+/* Only promote specific known-animated elements — not all Tailwind classes */
+/* Blanket translateZ(0) on .transform/.transition creates thousands of GPU layers on mobile */
+.motion-div,
+[data-framer-motion] {
   backface-visibility: hidden;
-}
-
-/* Reduce this on mobile to save memory */
-@media (max-width: 768px) {
-  .transform,
-  .transition,
-  [class*="animate-"] {
-    transform: none;
-    backface-visibility: visible;
-  }
 }
 
 /* ================= FONT OPTIMIZATION ================= */
@@ -652,12 +641,21 @@ html {
 /* Load critical CSS first */
 html {
   font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden; /* prevent horizontal scroll on mobile */
 }
 
 body {
   margin: 0;
   padding: 0;
   background: white;
+  overflow-x: hidden; /* prevent horizontal scroll on mobile */
+}
+
+/* Faster tap response on mobile — eliminates 300ms click delay */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
 }
 
 

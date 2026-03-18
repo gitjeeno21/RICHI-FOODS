@@ -8,13 +8,27 @@ import { FiShoppingCart, FiHeart, FiShare2, FiStar, FiCheck } from 'react-icons/
    HELPER COMPONENTS
 ══════════════════════════════════════════════════════════ */
 
-const Orb = ({ className, delay = 0 }) => (
-  <motion.div
-    className={`absolute rounded-full blur-3xl pointer-events-none ${className}`}
-    animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
-    transition={{ duration: 6 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
-  />
-)
+// Disable Orbs on low-end / small-screen devices
+const shouldDisableOrbs = () => {
+  if (typeof navigator !== 'undefined' && navigator.deviceMemory) {
+    return navigator.deviceMemory <= 4
+  }
+  if (typeof window !== 'undefined') {
+    return window.innerWidth < 480
+  }
+  return false
+}
+
+const Orb = ({ className, delay = 0 }) => {
+  if (shouldDisableOrbs()) return null
+  return (
+    <motion.div
+      className={`absolute rounded-full blur-3xl pointer-events-none ${className}`}
+      animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
+      transition={{ duration: 7 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
+    />
+  )
+}
 
 const ProductDetail = () => {
   const { id } = useParams()
