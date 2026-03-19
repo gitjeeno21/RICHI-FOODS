@@ -27,17 +27,17 @@ const Orb = memo(({ className, delay = 0 }) => {
 })
 
 const products = [
-  { name: 'Apple', category: 'Juice', img: '/images/products/apple.png', color: '#10b981' },
-  { name: 'Mango', category: 'Juice', img: '/images/products/mango.png', color: '#F97316' },
-  { name: 'Grapes', category: 'Juice', img: '/images/products/grapes.png', color: '#7c3aed' },
-  { name: 'White Lemon', category: 'Juice', img: '/images/products/white-lemon.png', color: '#84cc16' },
-  { name: 'Orange', category: 'Juice', img: '/images/products/orange.png', color: '#F97316' },
-  { name: 'Green Lemon', category: 'Carbonated', img: '/images/products/green-lemon.png', color: '#84cc16' },
-  { name: 'Paneer Soda', category: 'Carbonated', img: '/images/products/paneer-soda.png', color: '#8b5cf6' },
-  { name: 'Salt Lemon', category: 'Carbonated', img: '/images/products/salt-lemon.png', color: '#64748b' },
-  { name: 'Cola', category: 'Carbonated', img: '/images/products/cola.png', color: '#475569' },
-  { name: 'Jeera', category: 'Carbonated', img: '/images/products/jeera.png', color: '#F97316' },
-  { name: 'Pine Apple', category: 'Juice', img: '/images/products/pine-apple.png', color: '#F97316' },
+  { name: 'Apple', category: 'Juice', img: '/images/products/apple.png', gradient: '#10b981, #059669, #047857', color: '#10b981' },
+  { name: 'Mango', category: 'Juice', img: '/images/products/mango.png', gradient: '#fbbf24, #f97316, #ea580c', color: '#F97316' },
+  { name: 'Grapes', category: 'Juice', img: '/images/products/grapes.png', gradient: '#a855f7, #9333ea, #7e22ce', color: '#7c3aed' },
+  { name: 'White Lemon', category: 'Juice', img: '/images/products/white_lemon.png', gradient: '#fcd34d, #fbbf24, #f59e0b', color: '#84cc16' },
+  { name: 'Orange', category: 'Juice', img: '/images/products/orange.png', gradient: '#fb7185, #f97316, #ea580c', color: '#F97316' },
+  { name: 'Green Lemon', category: 'Carbonated', img: '/images/products/green_lemon.png', gradient: '#34d399, #10b981, #059669', color: '#84cc16' },
+  { name: 'Paneer Soda', category: 'Carbonated', img: '/images/products/paneer_soda.png', gradient: '#c084fc, #a855f7, #9333ea', color: '#8b5cf6' },
+  { name: 'Salt Lemon', category: 'Carbonated', img: '/images/products/salt_lemon.png', gradient: '#94a3b8, #64748b, #475569', color: '#64748b' },
+  { name: 'Cola', category: 'Carbonated', img: '/images/products/cola.png', gradient: '#1e293b, #0f172a, #020617', color: '#475569' },
+  { name: 'Jeera Masala', category: 'Carbonated', img: '/images/products/jeera_masala.png', gradient: '#fed7aa, #fb923c, #f97316', color: '#F97316' },
+  { name: 'Mango 2', category: 'Juice', img: '/images/products/mango_2.png', gradient: '#fbbf24, #fb923c, #f97316', color: '#F97316' },
 ]
 
 const filters = ['All', 'Juice', 'Carbonated']

@@ -40,9 +40,9 @@ const shouldDisableOrbs = () => {
 */
 const heroCards = [
   {
-    name: 'Paalman Milk',
-    img: '/images/products/paalman-milk.png',
-    bg: '#f59e0b',
+    name: 'Salt Lemon',
+    img: '/images/products/salt_lemon.png',
+    bg: '#64748b',
     rot: -25,
     z: 0,
     xOffset: -550,
@@ -71,7 +71,7 @@ const heroCards = [
   },
   {
     name: 'White Lemon',
-    img: '/images/products/white-lemon.png',
+    img: '/images/products/white_lemon.png',
     bg: '#84cc16',
     rot: -5,
     z: 3,
@@ -80,9 +80,9 @@ const heroCards = [
     scale: 0.91,
   },
   {
-    name: 'Meriba Water',
-    img: '/images/products/meriba-water.png',
-    bg: '#06b6d4',
+    name: 'Green Lemon',
+    img: '/images/products/green_lemon.png',
+    bg: '#22c55e',
     rot: -2,
     z: 4,
     xOffset: -60,
@@ -111,7 +111,7 @@ const heroCards = [
   },
   {
     name: 'Paneer Soda',
-    img: '/images/products/paneer-soda.png',
+    img: '/images/products/paneer_soda.png',
     bg: '#8b5cf6',
     rot: 13,
     z: 2,
@@ -130,9 +130,9 @@ const heroCards = [
     scale: 0.70,
   },
   {
-    name: 'Thunder Fizzy',
-    img: '/images/products/thunder-fizzy.png',
-    bg: '#ec4899',
+    name: 'Jeera Masala',
+    img: '/images/products/jeera_masala.png',
+    bg: '#F97316',
     rot: 25,
     z: 0,
     xOffset: 420,
@@ -140,8 +140,8 @@ const heroCards = [
     scale: 0.65,
   },
   {
-    name: 'Agnee Energy',
-    img: '/images/products/agnee-energy.png',
+    name: 'Mango 2',
+    img: '/images/products/mango_2.png',
     bg: '#dc2626',
     rot: 18,
     z: 1,
@@ -157,8 +157,13 @@ const products = [
   { name: 'Apple',        tag: 'Juice',           img: '/images/products/apple.png',        gradient: 'from-green-400 via-emerald-400 to-teal-400',    glow: 'shadow-green-300/60' },
   { name: 'Grapes',       tag: 'Juice',           img: '/images/products/grapes.png',       gradient: 'from-purple-500 to-purple-700',                 glow: 'shadow-purple-300/60' },
   { name: 'Orange',       tag: 'Juice',           img: '/images/products/orange.png',       gradient: 'from-red-500 via-rose-400 to-[#F97316]',       glow: 'shadow-[#F97316]/40' },
-  { name: 'Paneer Soda',  tag: 'Carbonated',      img: '/images/products/paneer-soda.png', gradient: 'from-purple-400 to-violet-500',                 glow: 'shadow-purple-300/60' },
+  { name: 'White Lemon',  tag: 'Juice',           img: '/images/products/white_lemon.png', gradient: 'from-yellow-400 via-lime-400 to-green-400',    glow: 'shadow-yellow-300/60' },
+  { name: 'Green Lemon',  tag: 'Carbonated',      img: '/images/products/green_lemon.png', gradient: 'from-green-500 to-emerald-600',                 glow: 'shadow-green-300/60' },
+  { name: 'Paneer Soda',  tag: 'Carbonated',      img: '/images/products/paneer_soda.png', gradient: 'from-purple-400 to-violet-500',                 glow: 'shadow-purple-300/60' },
   { name: 'Cola',         tag: 'Carbonated',      img: '/images/products/cola.png',        gradient: 'from-slate-500 via-zinc-500 to-gray-400',      glow: 'shadow-slate-300/60' },
+  { name: 'Jeera Masala', tag: 'Carbonated',      img: '/images/products/jeera_masala.png', gradient: 'from-orange-500 to-amber-600',                  glow: 'shadow-orange-300/60' },
+  { name: 'Salt Lemon',   tag: 'Carbonated',      img: '/images/products/salt_lemon.png',  gradient: 'from-slate-400 via-gray-400 to-zinc-400',     glow: 'shadow-slate-300/60' },
+  { name: 'Mango 2',      tag: 'Juice',           img: '/images/products/mango_2.png',     gradient: 'from-amber-400 via-orange-500 to-red-400',     glow: 'shadow-orange-300/60' },
 ]
 
 const stats = [
@@ -181,7 +186,7 @@ const storyGrid = [
   { src: '/images/story/community.jpg', label: 'Community',    bg: 'from-rose-50 to-pink-50',     border: 'border-rose-100'    },
 ]
 
-const ticker = ['Paalman Milk', 'Apple', 'Grapes', 'White Lemon', 'Meriba Water', 'Mango', 'Orange', 'Paneer Soda', 'Cola', 'Thunder Fizzy', 'Agnee Energy']
+const ticker = ['Salt Lemon', 'Apple', 'Grapes', 'White Lemon', 'Green Lemon', 'Mango', 'Orange', 'Paneer Soda', 'Cola', 'Jeera Masala', 'Mango 2']
 
 /* ══════════════════════════════════════════════════════════════
    UTILITY COMPONENTS
